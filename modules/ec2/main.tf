@@ -25,7 +25,7 @@ resource "aws_instance" "ci" {
   user_data_replace_on_change = true
 
   root_block_device {
-    volume_size           = 30
+    volume_size           = 80
     volume_type           = "gp3"
     delete_on_termination = true
   }
@@ -56,5 +56,28 @@ resource "aws_instance" "runtime" {
   tags = merge(var.common_tags, {
     Name = "${var.name_prefix}-ec2-runtime"
     Role = "runtime"
+  })
+}
+
+resource "aws_instance" "defectdojo" {
+  ami                         = data.aws_ami.amazon_linux_2023.id
+  instance_type               = var.defectdojo_instance_type
+  subnet_id                   = var.subnet_id
+  vpc_security_group_ids      = [var.defectdojo_security_group_id]
+  iam_instance_profile        = var.instance_profile_name
+  associate_public_ip_address = true
+
+  user_data                   = var.defectdojo_user_data
+  user_data_replace_on_change = true
+
+  root_block_device {
+    volume_size           = 40
+    volume_type           = "gp3"
+    delete_on_termination = true
+  }
+
+  tags = merge(var.common_tags, {
+    Name = "${var.name_prefix}-ec2-defectdojo"
+    Role = "defectdojo"
   })
 }

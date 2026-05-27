@@ -46,6 +46,12 @@ variable "runtime_instance_type" {
   default     = "t3.medium"
 }
 
+variable "defectdojo_instance_type" {
+  description = "EC2 instance type for DefectDojo server"
+  type        = string
+  default     = "t3.medium"
+}
+
 variable "aws_profile" {
   description = "AWS CLI profile name"
   type        = string

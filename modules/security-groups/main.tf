@@ -47,9 +47,9 @@ resource "aws_security_group_rule" "ci_harbor_from_runtime" {
   security_group_id        = aws_security_group.ci.id
   source_security_group_id = aws_security_group.runtime.id
 
-  from_port   = 8082
-  to_port     = 8082
-  protocol    = "tcp"
+  from_port = 8082
+  to_port   = 8082
+  protocol  = "tcp"
 
   description = "Runtime server pulls images from Harbor"
 }
@@ -59,9 +59,9 @@ resource "aws_security_group_rule" "runtime_k3s_from_ci" {
   security_group_id        = aws_security_group.runtime.id
   source_security_group_id = aws_security_group.ci.id
 
-  from_port   = 6443
-  to_port     = 6443
-  protocol    = "tcp"
+  from_port = 6443
+  to_port   = 6443
+  protocol  = "tcp"
 
   description = "CI server accesses k3s API"
 }
@@ -100,4 +100,51 @@ resource "aws_security_group_rule" "runtime_egress_all" {
   cidr_blocks = ["0.0.0.0/0"]
 
   description = "Allow all outbound traffic from Runtime server"
+}
+
+# --- DefectDojo 전용 보안그룹 (ci/runtime 패턴과 동일) ---
+resource "aws_security_group" "defectdojo" {
+  name        = "${var.name_prefix}-defectdojo-sg"
+  description = "Security group for DefectDojo vuln-management server"
+  vpc_id      = var.vpc_id
+
+  tags = merge(var.common_tags, {
+    Name = "${var.name_prefix}-defectdojo-sg"
+  })
+}
+
+resource "aws_security_group_rule" "defectdojo_ui_admin" {
+  type              = "ingress"
+  security_group_id = aws_security_group.defectdojo.id
+
+  from_port   = 8080
+  to_port     = 8080
+  protocol    = "tcp"
+  cidr_blocks = [var.allowed_admin_cidr]
+
+  description = "Admin access to DefectDojo UI"
+}
+
+resource "aws_security_group_rule" "defectdojo_from_ci" {
+  type                     = "ingress"
+  security_group_id        = aws_security_group.defectdojo.id
+  source_security_group_id = aws_security_group.ci.id
+
+  from_port = 8080
+  to_port   = 8080
+  protocol  = "tcp"
+
+  description = "CI pipeline pushes scan results to DefectDojo"
+}
+
+resource "aws_security_group_rule" "defectdojo_egress_all" {
+  type              = "egress"
+  security_group_id = aws_security_group.defectdojo.id
+
+  from_port   = 0
+  to_port     = 0
+  protocol    = "-1"
+  cidr_blocks = ["0.0.0.0/0"]
+
+  description = "Allow all outbound traffic from DefectDojo server"
 }

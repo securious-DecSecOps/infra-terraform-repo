@@ -41,3 +41,19 @@ output "ssm_connect_ci" {
 output "ssm_connect_runtime" {
   value = "aws ssm start-session --target ${module.ec2.runtime_instance_id}"
 }
+
+output "defectdojo_instance_id" {
+  value = module.ec2.defectdojo_instance_id
+}
+
+output "defectdojo_public_ip" {
+  value = module.ec2.defectdojo_public_ip
+}
+
+output "defectdojo_url" {
+  value = "http://${module.ec2.defectdojo_public_ip}:8080"
+}
+
+output "ssm_connect_defectdojo" {
+  value = "aws ssm start-session --target ${module.ec2.defectdojo_instance_id}"
+}
