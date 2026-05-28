@@ -34,6 +34,18 @@ variable "runtime_user_data" {
   type = string
 }
 
+variable "defectdojo_instance_type" {
+  type = string
+}
+
+variable "defectdojo_security_group_id" {
+  type = string
+}
+
+variable "defectdojo_user_data" {
+  type = string
+}
+
 variable "common_tags" {
   type = map(string)
 }

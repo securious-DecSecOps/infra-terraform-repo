@@ -21,3 +21,15 @@ output "runtime_public_ip" {
 output "runtime_private_ip" {
   value = aws_instance.runtime.private_ip
 }
+
+output "defectdojo_instance_id" {
+  value = aws_instance.defectdojo.id
+}
+
+output "defectdojo_public_ip" {
+  value = aws_instance.defectdojo.public_ip
+}
+
+output "defectdojo_private_ip" {
+  value = aws_instance.defectdojo.private_ip
+}

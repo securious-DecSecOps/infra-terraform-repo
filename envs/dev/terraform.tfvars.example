@@ -6,7 +6,11 @@ environment  = "dev"
 vpc_cidr           = "10.0.0.0/16"
 public_subnet_cidr = "10.0.1.0/24"
 
-allowed_admin_cidr = "0.0.0.0/0"
+# ⚠️ 절대 "0.0.0.0/0" 금지 (취약앱 RCE가 인터넷에 노출됨).
+# SSM 포트포워딩으로 접속하면 VPC만 허용: "10.0.0.0/16"
+# 공인 IP로 직접 접속하려면 본인 IP만: "<내공인IP>/32"
+allowed_admin_cidr = "10.0.0.0/16"
 
-ci_instance_type      = "t3.medium"
-runtime_instance_type = "t3.medium"
+ci_instance_type         = "t3.xlarge"
+runtime_instance_type    = "t3.xlarge"
+defectdojo_instance_type = "t3.medium"

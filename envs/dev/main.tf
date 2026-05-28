@@ -36,17 +36,20 @@ module "security_groups" {
 module "ec2" {
   source = "../../modules/ec2"
 
-  name_prefix               = local.name_prefix
-  subnet_id                 = module.network.public_subnet_id
-  ci_security_group_id      = module.security_groups.ci_security_group_id
-  runtime_security_group_id = module.security_groups.runtime_security_group_id
-  instance_profile_name     = module.iam.instance_profile_name
+  name_prefix                  = local.name_prefix
+  subnet_id                    = module.network.public_subnet_id
+  ci_security_group_id         = module.security_groups.ci_security_group_id
+  runtime_security_group_id    = module.security_groups.runtime_security_group_id
+  defectdojo_security_group_id = module.security_groups.defectdojo_security_group_id
+  instance_profile_name        = module.iam.instance_profile_name
 
-  ci_instance_type      = var.ci_instance_type
-  runtime_instance_type = var.runtime_instance_type
+  ci_instance_type         = var.ci_instance_type
+  runtime_instance_type    = var.runtime_instance_type
+  defectdojo_instance_type = var.defectdojo_instance_type
 
-  ci_user_data      = file("${path.module}/../../scripts/user-data/ci-server.sh")
-  runtime_user_data = file("${path.module}/../../scripts/user-data/runtime-server.sh")
+  ci_user_data         = file("${path.module}/../../scripts/user-data/ci-server.sh")
+  runtime_user_data    = file("${path.module}/../../scripts/user-data/runtime-server.sh")
+  defectdojo_user_data = file("${path.module}/../../scripts/user-data/defectdojo-server.sh")
 
   common_tags = local.common_tags
 }
