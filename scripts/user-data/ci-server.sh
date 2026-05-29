@@ -86,6 +86,12 @@ python3.11 -m venv /opt/checkov-venv
 /opt/checkov-venv/bin/pip install --upgrade pip
 /opt/checkov-venv/bin/pip install checkov
 ln -sf /opt/checkov-venv/bin/checkov "$BIN/checkov"
+# helm CLI (checkov/kubescape의 helm-rendered 매니페스트 스캔에 필요)
+curl -fsSL https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+# aws CLI v2 (자체완결형; SNS 보안 알림 스테이지에서 사용. AL2023 기본 aws v1은 jmespath 깨짐)
+curl -fsSL "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o /tmp/awscliv2.zip
+unzip -oq /tmp/awscliv2.zip -d /tmp
+/tmp/aws/install --update
 
 # --- motd ---
 cat <<'EOF' > /etc/motd
